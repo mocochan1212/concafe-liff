@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>コンカフェde遊び隊 参加フォーム</title>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: #fdf6f9;
+    color: #3a3a3a;
+    padding: 24px 16px 60px;
+    line-height: 1.8;
+  }
+  .header {
+    background: linear-gradient(135deg, #e91e63, #c2185b);
+    color: #fff;
+    text-align: center;
+    padding: 24px 16px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+  }
+  .header h1 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+  .header p { font-size: 13px; opacity: 0.85; }
+  .card {
+    background: #fff;
+    border: 1px solid #f8bbd0;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card h2 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #e91e63;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #fce4ec;
+  }
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #555;
+    margin-bottom: 6px;
+  }
+  .form-group label .required {
+    color: #e91e63;
+    margin-left: 4px;
+    font-size: 11px;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #f8bbd0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #3a3a3a;
+    background: #fdf6f9;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: #e91e63;
+    background: #fff;
+  }
+  .form-group textarea { height: 100px; resize: vertical; }
+  .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+  .checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 400;
+    cursor: pointer;
+  }
+  .checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #e91e63;
+  }
+  .note {
+    font-size: 12px;
+    color: #999;
+    margin-top: 6px;
+  }
+  .submit-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #e91e63, #c2185b);
+    color: #fff;
+    border: none;
+    padding: 16px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    letter-spacing: 0.05em;
+  }
+  .submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .success-screen h2 { font-size: 20px; font-weight: 700; color: #e91e63; margin-bottom: 12px; }
+  .success-screen p { font-size: 14px; color: #555; line-height: 1.9; }
+</style>
+</head>
+<body>
+
+<div id="formScreen">
+  <div class="header">
+    <h1>コンカフェde遊び隊</h1>
+    <p>参加申請フォーム</p>
+  </div>
+
+  <div class="card">
+    <h2>基本情報</h2>
+    <div class="form-group">
+      <label>ニックネーム<span class="required">※必須</span></label>
+      <input type="text" id="nickname" placeholder="例：さくら">
+    </div>
+    <div class="form-group">
+      <label>年齢<span class="required">※必須</span></label>
+      <input type="number" id="age" placeholder="例：24" min="18" max="99">
+    </div>
+    <div class="form-group">
+      <label>性別<span class="required">※必須</span></label>
+      <select id="gender">
+        <option value="">選択してください</option>
+        <option value="女性">女性</option>
+        <option value="男性">男性</option>
+        <option value="その他">その他</option>
+        <option value="回答しない">回答しない</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>SNS情報</h2>
+    <div class="form-group">
+      <label>XのアカウントID<span class="required">※必須</span></label>
+      <input type="text" id="twitter" placeholder="例：@concafe_fan">
+      <p class="note">公開アカウントのみ対象です</p>
+    </div>
+    <div class="form-group">
+      <label>InstagramのアカウントID</label>
+      <input type="text" id="instagram" placeholder="例：@concafe_fan">
+      <p class="note">お持ちの方のみご記入ください</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>来店情報</h2>
+    <div class="form-group">
+      <label>希望店舗<span class="required">※必須（複数選択可）</span></label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="store" value="アラジンシーシャ（名古屋）"> アラジンシーシャ（名古屋）</label>
+        <label><input type="checkbox" name="store" value="サキュバスシーシャ TAILS 名古屋"> サキュバスシーシャ TAILS 名古屋</label>
+        <label><input type="checkbox" name="store" value="Witches Ark（名古屋）"> Witches Ark（名古屋）</label>
+        <label><input type="checkbox" name="store" value="Succubus Night Bar 夜伽 京都木屋町"> Succubus Night Bar 夜伽 京都木屋町</label>
+        <label><input type="checkbox" name="store" value="サキュバスシーシャ MORRIGAN 難波"> サキュバスシーシャ MORRIGAN 難波</label>
+        <label><input type="checkbox" name="store" value="サキュバスシーシャ VIPER 道頓堀"> サキュバスシーシャ VIPER 道頓堀</label>
+        <label><input type="checkbox" name="store" value="電脳サキュバス 心斎橋"> 電脳サキュバス 心斎橋</label>
+        <label><input type="checkbox" name="store" value="サキュバスシーシャ WISP 博多"> サキュバスシーシャ WISP 博多</label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>希望来店日<span class="required">※必須</span></label>
+      <input type="text" id="visitDate" placeholder="例：6月中旬ごろ、6/15前後など">
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>その他</h2>
+    <div class="form-group">
+      <label>よく行くコンカフェ上位3店舗</label>
+      <textarea id="favoriteShops" placeholder="例：〇〇（新宿）、△△（池袋）など&#10;初めての方は未記入でOKです"></textarea>
+      <p class="note">初めての方は未記入でOKです</p>
+    </div>
+    <div class="form-group">
+      <label>自由記入欄</label>
+      <textarea id="freeText" placeholder="ご質問・意気込みなどお気軽にどうぞ"></textarea>
+    </div>
+  </div>
+
+  <button class="submit-btn" id="submitBtn" onclick="submitForm()">申請する</button>
+</div>
+
+<div class="success-screen" id="successScreen">
+  <h2>申請を受け付けました！</h2>
+  <p>ご応募ありがとうございます。<br>審査結果は公式LINEよりご連絡します。<br>しばらくお待ちください。</p>
+</div>
+
+<script>
+const LIFF_ID = "2010229842-9bz1Zeqr";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwTekxUkHgsrIb7KhxwwOP4XR8H4bR8Z0vdVrAoUgJBibW4WkeYXuZ0dffYpvh52okZaQ/exec";
+
+let lineUserId = "";
+
+async function initLiff() {
+  try {
+    await liff.init({ liffId: LIFF_ID });
+    if (!liff.isLoggedIn()) {
+      liff.login();
+      return;
+    }
+    const profile = await liff.getProfile();
+    lineUserId = profile.userId;
+  } catch (e) {
+    console.error("LIFF初期化エラー:", e);
+  }
+}
+
+async function submitForm() {
+  const nickname = document.getElementById("nickname").value.trim();
+  const age = document.getElementById("age").value.trim();
+  const gender = document.getElementById("gender").value;
+  const twitter = document.getElementById("twitter").value.trim();
+  const instagram = document.getElementById("instagram").value.trim();
+  const visitDate = document.getElementById("visitDate").value.trim();
+  const favoriteShops = document.getElementById("favoriteShops").value.trim();
+  const freeText = document.getElementById("freeText").value.trim();
+  const stores = [...document.querySelectorAll('input[name="store"]:checked')]
+    .map(el => el.value).join("、");
+
+  if (!nickname || !age || !gender || !twitter || !stores || !visitDate) {
+    alert("必須項目をすべて入力してください");
+    return;
+  }
+
+  const btn = document.getElementById("submitBtn");
+  btn.disabled = true;
+  btn.textContent = "送信中...";
+
+  const data = {
+    lineUserId,
+    nickname,
+    age,
+    gender,
+    twitter,
+    instagram,
+    stores,
+    visitDate,
+    favoriteShops,
+    freeText,
+    timestamp: new Date().toLocaleString("ja-JP")
+  };
+
+  try {
+    await fetch(GAS_URL, {
+      method: "POST",
+      body: JSON.stringify(data)
+    });
+    document.getElementById("formScreen").style.display = "none";
+    document.getElementById("successScreen").style.display = "block";
+  } catch (e) {
+    alert("送信に失敗しました。もう一度お試しください。");
+    btn.disabled = false;
+    btn.textContent = "申請する";
+  }
+}
+
+initLiff();
+</script>
+</body>
+</html>
